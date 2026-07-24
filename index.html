@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Bosphore — Kebab, Tacos & Burgers à Les Hauts-d'Anjou</title>
+<meta name="description" content="Le Bosphore, kebab grillé minute à Les Hauts-d'Anjou. Kebabs, tacos, burgers, paninis, assiettes et desserts faits maison. Sur place et à emporter — 07 52 95 78 78.">
+<meta name="theme-color" content="#1c1410">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --charcoal:#1c1410;
+  --charcoal-2:#241a14;
+  --charcoal-3:#2d211a;
+  --flame:#c8342a;
+  --flame-dark:#8f2019;
+  --saffron:#e8a33d;
+  --cream:#f2e8d8;
+  --olive:#6f7a3d;
+  --skewer:#a9a196;
+  --radius:14px;
+  --maxw:1180px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--charcoal);
+  color:var(--cream);
+  font-family:'Oswald', sans-serif;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block; max-width:100%;}
+a{color:inherit; text-decoration:none;}
+ul{list-style:none;}
+button{font:inherit; cursor:pointer; border:none; background:none; color:inherit;}
+.container{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+:focus-visible{outline:2px solid var(--saffron); outline-offset:3px;}
+
+h1,h2,h3{font-family:'Bebas Neue', sans-serif; letter-spacing:1.5px; text-transform:uppercase; line-height:1;}
+.eyebrow{
+  font-family:'Space Mono', monospace;
+  letter-spacing:6px;
+  font-size:12px;
+  color:var(--saffron);
+  text-transform:uppercase;
+}
+.section{ padding:110px 0; position:relative; }
+.section-head{ text-align:center; max-width:640px; margin:0 auto 56px; }
+.section-head h2{ font-size:clamp(38px,6vw,58px); color:var(--cream); margin-top:10px; }
+.section-head p{ color:var(--skewer); margin-top:14px; font-size:16px; }
+
+/* reveal on scroll */
+[data-reveal]{ opacity:0; transform:translateY(28px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+[data-reveal].is-visible{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){
+  [data-reveal]{ opacity:1; transform:none; transition:none; }
+  html{ scroll-behavior:auto; }
+}
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 28px;
+  transition:background .35s var(--ease), backdrop-filter .35s var(--ease), padding .35s var(--ease);
+}
+.nav.scrolled{
+  background:rgba(28,20,16,0.82);
+  backdrop-filter:blur(10px);
+  padding:14px 28px;
+  box-shadow:0 1px 0 rgba(242,232,216,0.08);
+}
+.nav .logo{
+  font-family:'Bebas Neue', sans-serif;
+  font-size:26px;
+  letter-spacing:2px;
+  color:var(--cream);
+}
+.nav .logo span{ color:var(--flame); }
+.nav-links{ display:flex; gap:36px; }
+.nav-links a{
+  font-family:'Space Mono', monospace;
+  font-size:13px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--skewer);
+  transition:color .2s;
+  position:relative;
+}
+.nav-links a:hover{ color:var(--cream); }
+.nav-links a::after{
+  content:""; position:absolute; left:0; bottom:-6px; width:0; height:2px;
+  background:var(--flame); transition:width .25s var(--ease);
+}
+.nav-links a:hover::after{ width:100%; }
+.nav-cta{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--flame); color:var(--cream);
+  font-family:'Space Mono', monospace; font-size:13px; font-weight:700;
+  padding:10px 18px; border-radius:6px; letter-spacing:.5px;
+  box-shadow:0 3px 0 var(--flame-dark);
+  transition:transform .15s;
+}
+.nav-cta:hover{ transform:translateY(-1px); }
+.burger{ display:none; width:26px; height:20px; position:relative; }
+.burger span{
+  position:absolute; left:0; width:100%; height:2px; background:var(--cream);
+  transition:transform .25s, opacity .25s;
+}
+.burger span:nth-child(1){ top:0; }
+.burger span:nth-child(2){ top:9px; }
+.burger span:nth-child(3){ top:18px; }
+.burger.open span:nth-child(1){ transform:translateY(9px) rotate(45deg); }
+.burger.open span:nth-child(2){ opacity:0; }
+.burger.open span:nth-child(3){ transform:translateY(-9px) rotate(-45deg); }
+
+.mobile-panel{
+  position:fixed; inset:0; background:var(--charcoal); z-index:99;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px;
+  transform:translateY(-100%); transition:transform .4s var(--ease);
+}
+.mobile-panel.open{ transform:translateY(0); }
+.mobile-panel a{ font-family:'Bebas Neue', sans-serif; font-size:34px; color:var(--cream); }
+
+/* ============ HERO ============ */
+.hero{
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  padding:140px 24px 80px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(200,52,42,0.20), transparent 60%),
+    radial-gradient(ellipse at 85% 90%, rgba(232,163,61,0.14), transparent 55%),
+    var(--charcoal);
+}
+.hero-glow{
+  position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(115deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 4px);
+}
+.hero .eyebrow{ font-size:14px; }
+.hero h1{
+  font-size:clamp(64px,13vw,150px);
+  color:var(--cream);
+  margin-top:14px;
+  text-shadow:0 0 32px rgba(200,52,42,0.5);
+}
+.hero h1 span{ color:var(--flame); }
+.hero .sub{
+  font-style:italic;
+  color:var(--skewer);
+  font-size:clamp(16px,2vw,20px);
+  margin-top:16px;
+  max-width:520px;
+}
+.badge-strip{
+  margin-top:28px;
+  font-family:'Space Mono', monospace;
+  font-size:13px;
+  letter-spacing:.5px;
+  color:var(--saffron);
+  background:rgba(232,163,61,0.1);
+  border:1px solid rgba(232,163,61,0.35);
+  padding:10px 20px;
+  border-radius:30px;
+}
+.hero-ctas{ display:flex; gap:18px; margin-top:38px; flex-wrap:wrap; justify-content:center; }
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:'Space Mono', monospace; font-weight:700; font-size:15px; letter-spacing:.5px;
+  padding:16px 32px; border-radius:8px; transition:transform .18s, box-shadow .18s;
+}
+.btn-primary{ background:var(--flame); color:var(--cream); box-shadow:0 5px 0 var(--flame-dark); }
+.btn-primary:hover{ transform:translateY(-2px); }
+.btn-outline{ border:1.5px solid var(--skewer); color:var(--cream); }
+.btn-outline:hover{ border-color:var(--saffron); color:var(--saffron); }
+
+/* skewer signature element, reused as section divider */
+.skewer{ display:flex; align-items:center; width:100%; height:16px; margin:0 auto; max-width:560px; }
+.skewer .rod{ flex:1; height:3px; background:linear-gradient(to right, transparent, var(--skewer) 8%, var(--skewer) 92%, transparent); }
+.skewer .chunk{ width:14px; height:14px; border-radius:3px; transform:rotate(45deg); margin:0 4px; flex-shrink:0; }
+.skewer .chunk:nth-child(4n+1){ background:var(--flame); }
+.skewer .chunk:nth-child(4n+2){ background:var(--saffron); border-radius:50%; }
+.skewer .chunk:nth-child(4n+3){ background:var(--olive); }
+.skewer .chunk:nth-child(4n+4){ background:var(--flame-dark); border-radius:50%; }
+
+.scroll-cue{
+  position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  color:var(--skewer); font-family:'Space Mono', monospace; font-size:11px; letter-spacing:2px;
+  text-transform:uppercase;
+  animation:bob 2.2s ease-in-out infinite;
+}
+@keyframes bob{ 0%,100%{ transform:translate(-50%,0); } 50%{ transform:translate(-50%,8px); } }
+@media (prefers-reduced-motion: reduce){ .scroll-cue{ animation:none; } }
+
+/* ============ SPECIALTIES ============ */
+.specialties{ background:var(--charcoal-2); }
+.spec-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+.spec-card{
+  background:var(--charcoal-3); border-radius:var(--radius); padding:34px 26px;
+  border-top:4px solid var(--flame); text-align:center;
+  transition:transform .25s var(--ease), border-color .25s;
+  cursor:pointer;
+}
+.spec-card:nth-child(2){ border-top-color:var(--saffron); }
+.spec-card:nth-child(3){ border-top-color:var(--olive); }
+.spec-card:nth-child(4){ border-top-color:var(--flame-dark); }
+.spec-card:hover{ transform:translateY(-6px); }
+.spec-icon{ font-size:44px; margin-bottom:16px; }
+.spec-card h3{ font-size:26px; color:var(--cream); text-transform:none; letter-spacing:0; }
+.spec-card .price{ color:var(--saffron); font-family:'Space Mono', monospace; font-size:14px; margin-top:6px; }
+.spec-card button{
+  margin-top:18px; font-family:'Space Mono', monospace; font-size:12px; letter-spacing:1px;
+  color:var(--skewer); border-bottom:1px solid transparent; padding-bottom:2px; transition:.2s;
+}
+.spec-card button:hover{ color:var(--saffron); border-color:var(--saffron); }
+
+/* ============ MENU ============ */
+.menu-tabs{
+  display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:48px;
+}
+.tab-btn{
+  font-family:'Space Mono', monospace; font-size:13px; letter-spacing:.5px;
+  padding:10px 18px; border-radius:30px; border:1px solid rgba(242,232,216,0.18);
+  color:var(--skewer); transition:.2s;
+}
+.tab-btn:hover{ color:var(--cream); border-color:var(--saffron); }
+.tab-btn.active{ background:var(--flame); color:var(--cream); border-color:var(--flame); }
+
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; animation:fadein .35s var(--ease); }
+@keyframes fadein{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+
+.menu-list{ display:grid; grid-template-columns:1fr 1fr; gap:0 48px; max-width:920px; margin:0 auto; }
+.menu-item{ padding:16px 0; border-bottom:1px dotted rgba(242,232,216,0.15); }
+.menu-item .name{ font-size:18px; font-weight:600; display:flex; align-items:center; gap:8px; }
+.menu-item .prices{ font-family:'Space Mono', monospace; font-size:13px; color:var(--skewer); margin-top:4px; display:flex; flex-wrap:wrap; gap:4px 12px; }
+.menu-item .prices .main{ color:var(--flame); font-weight:700; font-size:16px; }
+.badge{
+  background:var(--saffron); color:var(--charcoal); font-family:'Space Mono', monospace;
+  font-size:10px; font-weight:700; letter-spacing:.5px; padding:2px 7px; border-radius:3px;
+}
+.choice-note{ grid-column:1 / -1; font-size:13px; font-style:italic; color:var(--skewer); margin:6px 0 4px; }
+.choice-note b{ color:var(--saffron); font-style:normal; }
+
+/* ============ MEATS ============ */
+.meats{ background:var(--charcoal-2); }
+.meat-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:18px; }
+.meat-card{ text-align:center; padding:26px 14px; }
+.meat-icon{ font-size:38px; margin-bottom:10px; }
+.meat-card h3{ font-size:18px; text-transform:none; letter-spacing:0; color:var(--cream); }
+.meat-card p{ font-size:13px; color:var(--skewer); margin-top:6px; }
+
+/* ============ WHY US ============ */
+.why-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+.why-item{ display:flex; gap:16px; align-items:flex-start; }
+.why-icon{ font-size:28px; }
+.why-item h3{ font-size:18px; text-transform:none; letter-spacing:0; color:var(--cream); }
+.why-item p{ font-size:13px; color:var(--skewer); margin-top:4px; }
+
+/* ============ HOURS ============ */
+.hours-wrap{ display:flex; gap:48px; flex-wrap:wrap; justify-content:center; align-items:flex-start; }
+.status-card{
+  background:var(--charcoal-3); border-radius:var(--radius); padding:32px; min-width:260px; text-align:center;
+}
+.status-dot{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:8px; }
+.status-line{ font-family:'Space Mono', monospace; font-size:18px; font-weight:700; }
+.status-sub{ color:var(--skewer); font-size:13px; margin-top:8px; }
+.hours-table{ background:var(--charcoal-3); border-radius:var(--radius); overflow:hidden; min-width:320px; }
+.hours-row{ display:flex; justify-content:space-between; padding:14px 24px; font-size:14px; border-bottom:1px solid rgba(242,232,216,0.06); }
+.hours-row:last-child{ border-bottom:none; }
+.hours-row.today{ background:rgba(200,52,42,0.14); color:var(--saffron); font-weight:600; }
+.hours-row .closed{ color:var(--skewer); }
+
+/* ============ CONTACT ============ */
+.contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:stretch; }
+.contact-card{ display:flex; flex-direction:column; gap:24px; }
+.contact-line{ display:flex; gap:16px; align-items:flex-start; }
+.contact-line .ic{ font-size:22px; }
+.contact-line h3{ font-size:15px; text-transform:uppercase; letter-spacing:1px; color:var(--saffron); }
+.contact-line p, .contact-line a{ font-size:17px; color:var(--cream); margin-top:2px; }
+.map-frame{ border-radius:var(--radius); overflow:hidden; min-height:280px; border:1px solid rgba(242,232,216,0.1); }
+.map-frame iframe{ width:100%; height:100%; min-height:280px; border:0; filter:grayscale(0.3) contrast(1.1); }
+
+/* ============ FOOTER ============ */
+footer{ padding:48px 0 110px; text-align:center; border-top:1px solid rgba(242,232,216,0.08); }
+footer .logo{ font-family:'Bebas Neue', sans-serif; font-size:28px; }
+footer .logo span{ color:var(--flame); }
+footer p{ color:var(--skewer); font-size:13px; margin-top:10px; }
+footer .foot-links{ display:flex; gap:18px; justify-content:center; margin-top:14px; }
+footer .foot-links a{ font-family:'Space Mono', monospace; font-size:12px; color:var(--skewer); }
+footer .foot-links a:hover{ color:var(--saffron); }
+
+/* ============ MOBILE BOTTOM NAV ============ */
+.mobile-bar{
+  display:none; position:fixed; bottom:0; left:0; right:0; z-index:90;
+  background:rgba(28,20,16,0.94); backdrop-filter:blur(10px);
+  border-top:1px solid rgba(242,232,216,0.08);
+  padding:10px 6px calc(10px + env(safe-area-inset-bottom));
+}
+.mobile-bar ul{ display:flex; justify-content:space-around; }
+.mobile-bar a{ display:flex; flex-direction:column; align-items:center; gap:4px; font-size:10px; color:var(--skewer); letter-spacing:.5px; }
+.mobile-bar .ic{ font-size:20px; }
+.mobile-bar a.call{ color:var(--flame); }
+
+/* back to top */
+.to-top{
+  position:fixed; right:20px; bottom:20px; z-index:95;
+  width:46px; height:46px; border-radius:50%;
+  background:var(--flame); color:var(--cream);
+  display:flex; align-items:center; justify-content:center; font-size:20px;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);
+  opacity:0; pointer-events:none; transform:translateY(10px);
+  transition:opacity .25s, transform .25s;
+}
+.to-top.show{ opacity:1; pointer-events:auto; transform:none; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:960px){
+  .spec-grid{ grid-template-columns:repeat(2,1fr); }
+  .meat-grid{ grid-template-columns:repeat(3,1fr); }
+  .why-grid{ grid-template-columns:1fr 1fr; }
+  .contact-grid{ grid-template-columns:1fr; }
+  .menu-list{ grid-template-columns:1fr; }
+}
+@media (max-width:720px){
+  .nav-links, .nav-cta{ display:none; }
+  .burger{ display:block; }
+  .spec-grid{ grid-template-columns:1fr 1fr; }
+  .meat-grid{ grid-template-columns:repeat(2,1fr); }
+  .why-grid{ grid-template-columns:1fr; }
+  .section{ padding:80px 0; }
+  .mobile-bar{ display:block; }
+  body{ padding-bottom:70px; }
+  .to-top{ bottom:86px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <a href="#accueil" class="logo">LE <span>BOSPHORE</span></a>
+  <div class="nav-links">
+    <a href="#accueil">Accueil</a>
+    <a href="#menu">Notre menu</a>
+    <a href="#specialites">Spécialités</a>
+    <a href="#horaires">Horaires</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="tel:+33752957878" class="nav-cta">☎ Appeler</a>
+  <button class="burger" id="burger" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-panel" id="mobilePanel">
+  <a href="#accueil">Accueil</a>
+  <a href="#menu">Notre menu</a>
+  <a href="#specialites">Spécialités</a>
+  <a href="#horaires">Horaires</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="accueil">
+  <div class="hero-glow"></div>
+  <div class="eyebrow">Grillé minute</div>
+  <h1>LE <span>BOSPHORE</span></h1>
+  <p class="sub">Le goût authentique du kebab à Les Hauts-d'Anjou.</p>
+  <div class="badge-strip">⭐ Plus de 40 spécialités : kebabs, burgers, tacos, paninis, assiettes, desserts…</div>
+  <div class="hero-ctas">
+    <a href="#menu" class="btn btn-primary">🍽️ Voir le menu</a>
+    <a href="#contact" class="btn btn-outline">📍 Nous trouver</a>
+  </div>
+  <div class="scroll-cue">Découvrir ↓</div>
+</header>
+
+<!-- ============ SPECIALTIES ============ -->
+<section class="specialties section" id="specialites" data-reveal>
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Nos best-sellers</div>
+      <h2>Nos spécialités</h2>
+      <p>Les incontournables du Bosphore, plébiscités par nos clients.</p>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-card" data-tab="kebab" tabindex="0" role="button" aria-label="Voir la catégorie Kebab · Pita">
+        <div class="spec-icon">🥙</div>
+        <h3>Menu Kebab</h3>
+        <div class="price">dès 8.90€</div>
+        <button data-tab="kebab">Voir la catégorie</button>
+      </div>
+      <div class="spec-card" data-tab="burger" tabindex="0" role="button" aria-label="Voir la catégorie Burger">
+        <div class="spec-icon">🍔</div>
+        <h3>Big Bosphore</h3>
+        <div class="price">11.50€</div>
+        <button data-tab="burger">Voir la catégorie</button>
+      </div>
+      <div class="spec-card" data-tab="tacos" tabindex="0" role="button" aria-label="Voir la catégorie Tacos">
+        <div class="spec-icon">🌯</div>
+        <h3>Tacos XL</h3>
+        <div class="price">12.70€</div>
+        <button data-tab="tacos">Voir la catégorie</button>
+      </div>
+      <div class="spec-card" data-tab="assiette" tabindex="0" role="button" aria-label="Voir la catégorie Assiette">
+        <div class="spec-icon">🥗</div>
+        <h3>Assiette Mixte</h3>
+        <div class="price">14.00€</div>
+        <button data-tab="assiette">Voir la catégorie</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENU ============ -->
+<section class="section" id="menu" data-reveal>
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">La carte</div>
+      <h2>Notre menu</h2>
+      <p>Toutes nos formules, avec ou sans boisson, ou à l'unité.</p>
+    </div>
+
+    <div class="skewer" style="margin-bottom:44px;">
+      <div class="chunk"></div><div class="rod"></div><div class="chunk"></div>
+      <div class="chunk"></div><div class="rod"></div><div class="chunk"></div>
+      <div class="chunk"></div><div class="rod"></div><div class="chunk"></div>
+    </div>
+
+    <div class="menu-tabs" id="menuTabs">
+      <button class="tab-btn active" data-tab="kebab">Kebab · Pita</button>
+      <button class="tab-btn" data-tab="burger">Burger</button>
+      <button class="tab-btn" data-tab="tacos">Tacos</button>
+      <button class="tab-btn" data-tab="panini">Panini</button>
+      <button class="tab-btn" data-tab="assiette">Assiette</button>
+      <button class="tab-btn" data-tab="enfant">Menu Enfant</button>
+      <button class="tab-btn" data-tab="petite">Petite Faim</button>
+      <button class="tab-btn" data-tab="dessert">Dessert</button>
+    </div>
+
+    <div class="tab-panel active" id="panel-kebab">
+      <div class="menu-list">
+        <div class="menu-item"><div class="name">Menu Kebab <span class="badge">TOP VENTE</span></div><div class="prices"><span class="main">8.90€</span><span>sans boisson 8.10€ · seul 7.10€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Steak</div><div class="prices"><span class="main">9.50€</span><span>sans boisson 8.70€ · seul 7.70€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Poulet</div><div class="prices"><span class="main">10.50€</span><span>sans boisson 9.70€ · seul 8.70€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Kôfte</div><div class="prices"><span class="main">10.90€</span><span>sans boisson 10.10€ · seul 9.10€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Merguez</div><div class="prices"><span class="main">10.30€</span><span>sans boisson 9.50€ · seul 8.50€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Mixte (2 viandes)</div><div class="prices"><span class="main">11.00€</span><span>sans boisson 10.20€ · seul 9.20€</span></div></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-burger">
+      <div class="menu-list">
+        <div class="menu-item"><div class="name">Menu Cheeseburger</div><div class="prices"><span class="main">6.50€</span><span>sans boisson 5.70€ · seul 4.70€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Double Cheeseburger</div><div class="prices"><span class="main">9.90€</span><span>sans boisson 9.10€ · seul 8.10€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Poulet Burger</div><div class="prices"><span class="main">9.90€</span><span>sans boisson 9.10€ · seul 8.10€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Big Chef</div><div class="prices"><span class="main">10.50€</span><span>sans boisson 9.70€ · seul 8.70€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Big Bosphore</div><div class="prices"><span class="main">11.50€</span><span>sans boisson 10.70€ · seul 9.70€</span></div></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-tacos">
+      <div class="menu-list">
+        <div class="menu-item"><div class="name">Menu Tacos</div><div class="prices"><span class="main">10.20€</span><span>sans boisson 9.40€ · seul 8.40€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Tacos (2 viandes)</div><div class="prices"><span class="main">11.50€</span><span>sans boisson 10.70€ · seul 9.70€</span></div></div>
+        <div class="menu-item"><div class="name">Menu Tacos XL (3 viandes)</div><div class="prices"><span class="main">12.70€</span><span>sans boisson 11.90€ · seul 10.90€</span></div></div>
+        <div class="choice-note"><b>Viandes au choix :</b> Kebab, Poulet, Steak, Merguez, Nuggets, Tenders, Kôfte</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-panini">
+      <div class="menu-list">
+        <div class="menu-item"><div class="name">Menu Panini</div><div class="prices"><span class="main">9.50€</span><span>sans boisson 8.70€ · seul 7.70€</span></div></div>
+        <div class="choice-note"><b>Choix :</b> Fromage, Kebab, Steak, Poulet, Merguez, Kôfte</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-assiette">
+      <div class="menu-list">
+        <div class="menu-item"><div class="name">Assiette Kebab + frites</div><div class="prices"><span class="main">12.00€</span></div></div>
+        <div class="menu-item"><div class="name">Autre assiette + frites</div><div class="prices"><span class="main">13.00€</span></div></div>
+        <div class="choice-note"><b>Choix :</b> Steak, Kôfte, Merguez, Poulet</div>
+        <div class="menu-item"><div class="name">Assiette mixte + frites</div><div class="prices"><span class="main">14.00€</span></div></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-enfant">
+      <div class="menu-list">
+        <div class="menu-item"><div class="name">Cheeseburger + frites + boisson</div><div class="prices"><span class="main">6.50€</span></div></div>
+        <div class="menu-item"><div class="name">Nuggets (x4) + frites + boisson</div><div class="prices"><span class="main">6.50€</span></div></div>
+        <div class="menu-item"><div class="name">Viande Kebab + frites + boisson</div><div class="prices"><span class="main">6.50€</span></div></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-petite">
+      <div class="menu-list">
+        <div class="menu-item"><div class="name">Nuggets x4</div><div class="prices"><span class="main">3.50€</span></div></div>
+        <div class="menu-item"><div class="name">Tenders x3</div><div class="prices"><span class="main">4.00€</span></div></div>
+        <div class="menu-item"><div class="name">Nuggets x6</div><div class="prices"><span class="main">5.50€</span></div></div>
+        <div class="menu-item"><div class="name">Tenders x6</div><div class="prices"><span class="main">7.00€</span></div></div>
+        <div class="menu-item"><div class="name">Nuggets x10</div><div class="prices"><span class="main">9.00€</span></div></div>
+        <div class="menu-item"><div class="name">Tenders x10</div><div class="prices"><span class="main">12.00€</span></div></div>
+        <div class="menu-item"><div class="name">Frites petite</div><div class="prices"><span class="main">2.00€</span></div></div>
+        <div class="menu-item"><div class="name">Viande petite</div><div class="prices"><span class="main">6.50€</span></div></div>
+        <div class="menu-item"><div class="name">Frites moyenne</div><div class="prices"><span class="main">3.00€</span></div></div>
+        <div class="menu-item"><div class="name">Viande grande</div><div class="prices"><span class="main">11.00€</span></div></div>
+        <div class="menu-item"><div class="name">Frites grande</div><div class="prices"><span class="main">4.00€</span></div></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-dessert">
+      <div class="menu-list">
+        <div class="menu-item"><div class="name">Tiramisu</div><div class="prices"><span class="main">3.50€</span></div></div>
+        <div class="menu-item"><div class="name">Mister Freeze</div><div class="prices"><span class="main">0.80€</span></div></div>
+        <div class="menu-item"><div class="name">Panini Nutella</div><div class="prices"><span class="main">3.00€</span></div></div>
+        <div class="menu-item"><div class="name">Glace</div><div class="prices"><span class="main">2.00€</span></div></div>
+        <div class="menu-item"><div class="name">Baklava</div><div class="prices"><span class="main">3.50€</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MEATS ============ -->
+<section class="meats section" data-reveal>
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Sélection</div>
+      <h2>Nos viandes</h2>
+      <p>Grillées minute, jamais préparées à l'avance.</p>
+    </div>
+    <div class="meat-grid">
+      <div class="meat-card"><div class="meat-icon">🥙</div><h3>Döner Kebab</h3><p>Notre broche signature, grillée à la commande.</p></div>
+      <div class="meat-card"><div class="meat-icon">🥩</div><h3>Steak</h3><p>Viande hachée grillée, saveur généreuse.</p></div>
+      <div class="meat-card"><div class="meat-icon">🍗</div><h3>Poulet</h3><p>Mariné et grillé, tendre et parfumé.</p></div>
+      <div class="meat-card"><div class="meat-icon">🔥</div><h3>Kôfte</h3><p>Boulettes épicées façon maison.</p></div>
+      <div class="meat-card"><div class="meat-icon">🌶️</div><h3>Merguez</h3><p>Relevée, grillée juste comme il faut.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY US ============ -->
+<section class="section" data-reveal>
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">L'esprit maison</div>
+      <h2>Pourquoi Le Bosphore ?</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-item"><div class="why-icon">🔥</div><div><h3>Viande grillée minute</h3><p>Rien n'attend, tout est cuit à la commande.</p></div></div>
+      <div class="why-item"><div class="why-icon">🍟</div><div><h3>Frites croustillantes</h3><p>Dorées et chaudes, jamais tièdes.</p></div></div>
+      <div class="why-item"><div class="why-icon">🥗</div><div><h3>Crudités fraîches</h3><p>Préparées chaque jour sur place.</p></div></div>
+      <div class="why-item"><div class="why-icon">🥙</div><div><h3>Sandwichs généreux</h3><p>Des portions qui tiennent au corps.</p></div></div>
+      <div class="why-item"><div class="why-icon">⏱️</div><div><h3>Préparation rapide</h3><p>Idéal sur une pause déjeuner.</p></div></div>
+      <div class="why-item"><div class="why-icon">🏡</div><div><h3>Sur place & à emporter</h3><p>Comme vous préférez, comme vous voulez.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOURS ============ -->
+<section class="section" id="horaires" data-reveal>
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Quand venir</div>
+      <h2>Horaires</h2>
+    </div>
+    <div class="hours-wrap">
+      <div class="status-card">
+        <div class="status-line" id="statusLine"><span class="status-dot" id="statusDot"></span><span id="statusText">…</span></div>
+        <div class="status-sub" id="statusSub"></div>
+      </div>
+      <div class="hours-table" id="hoursTable">
+        <div class="hours-row" data-day="1"><span>Lundi</span><span class="closed">Fermé</span></div>
+        <div class="hours-row" data-day="2"><span>Mardi</span><span>12h00–13h45 / 18h30–22h00</span></div>
+        <div class="hours-row" data-day="3"><span>Mercredi</span><span>12h00–13h45 / 18h30–22h00</span></div>
+        <div class="hours-row" data-day="4"><span>Jeudi</span><span>12h00–13h45 / 18h30–22h00</span></div>
+        <div class="hours-row" data-day="5"><span>Vendredi</span><span>12h00–13h45 / 18h30–22h00</span></div>
+        <div class="hours-row" data-day="6"><span>Samedi</span><span>18h30–22h00</span></div>
+        <div class="hours-row" data-day="0"><span>Dimanche</span><span>18h30–22h00</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section" id="contact" data-reveal>
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Venez nous voir</div>
+      <h2>Contact</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-line">
+          <div class="ic">📞</div>
+          <div><h3>Téléphone</h3><a href="tel:+33752957878">07 52 95 78 78</a></div>
+        </div>
+        <div class="contact-line">
+          <div class="ic">📍</div>
+          <div><h3>Adresse</h3><p>Le Bosphore<br>21 Place Robert le Fort<br>49330 Les Hauts-d'Anjou</p></div>
+        </div>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=21+Place+Robert+le+Fort,+49330+Les+Hauts-d%27Anjou" target="_blank" rel="noopener" class="btn btn-primary" style="align-self:flex-start;">📍 Calculer mon itinéraire</a>
+      </div>
+      <div class="map-frame">
+        <iframe title="Localisation Le Bosphore" loading="lazy"
+          src="https://www.google.com/maps?q=21+Place+Robert+le+Fort,+49330+Les+Hauts-d%27Anjou&output=embed"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="logo">LE <span>BOSPHORE</span></div>
+    <p>21 Place Robert le Fort · 49330 Les Hauts-d'Anjou · 07 52 95 78 78</p>
+    <div class="foot-links">
+      <a href="#horaires">Horaires</a>
+      <a href="#menu">Menu</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <p style="margin-top:20px;">© 2026 Le Bosphore</p>
+  </div>
+</footer>
+
+<!-- ============ MOBILE BOTTOM NAV ============ -->
+<nav class="mobile-bar">
+  <ul>
+    <li><a href="#accueil"><span class="ic">🏠</span>Accueil</a></li>
+    <li><a href="#menu"><span class="ic">🍽️</span>Menu</a></li>
+    <li><a href="https://www.google.com/maps/dir/?api=1&destination=21+Place+Robert+le+Fort,+49330+Les+Hauts-d%27Anjou" target="_blank" rel="noopener"><span class="ic">📍</span>Itinéraire</a></li>
+    <li><a href="tel:+33752957878" class="call"><span class="ic">📞</span>Appeler</a></li>
+  </ul>
+</nav>
+
+<button class="to-top" id="toTop" aria-label="Retour en haut">↑</button>
+
+<script>
+// ---------- NAV SCROLL STATE ----------
+const nav = document.getElementById('nav');
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+  toTop.classList.toggle('show', window.scrollY > 600);
+}, { passive:true });
+toTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+// ---------- MOBILE PANEL ----------
+const burger = document.getElementById('burger');
+const panel = document.getElementById('mobilePanel');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  panel.classList.toggle('open');
+});
+panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  burger.classList.remove('open'); panel.classList.remove('open');
+}));
+
+// ---------- REVEAL ON SCROLL ----------
+const revealEls = document.querySelectorAll('[data-reveal]');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+}, { threshold:0.15 });
+revealEls.forEach(el => io.observe(el));
+
+// ---------- MENU TABS ----------
+function activateTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
+}
+// menu section tab buttons: just switch tab, no scroll needed (already in view)
+document.querySelectorAll('#menuTabs .tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+});
+// specialty cards: whole card is clickable, switches tab + scrolls to menu
+document.querySelectorAll('.spec-card[data-tab]').forEach(card => {
+  const go = () => {
+    activateTab(card.dataset.tab);
+    document.getElementById('menu').scrollIntoView({ behavior:'smooth' });
+  };
+  card.addEventListener('click', go);
+  card.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); }
+  });
+});
+
+// ---------- OPEN / CLOSED STATUS ----------
+// schedule per day (0=Sun..6=Sat), each range in minutes from midnight
+const schedule = {
+  0: [[18*60+30, 22*60]],
+  1: [],
+  2: [[12*60, 13*60+45],[18*60+30, 22*60]],
+  3: [[12*60, 13*60+45],[18*60+30, 22*60]],
+  4: [[12*60, 13*60+45],[18*60+30, 22*60]],
+  5: [[12*60, 13*60+45],[18*60+30, 22*60]],
+  6: [[18*60+30, 22*60]],
+};
+const dayNames = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+function fmt(mins){
+  const h = Math.floor(mins/60), m = mins%60;
+  return h + 'h' + (m ? String(m).padStart(2,'0') : '00');
+}
+function updateStatus(){
+  const now = new Date();
+  const day = now.getDay();
+  const mins = now.getHours()*60 + now.getMinutes();
+
+  // highlight today's row
+  document.querySelectorAll('.hours-row').forEach(r => r.classList.toggle('today', Number(r.dataset.day) === day));
+
+  const ranges = schedule[day];
+  let open = false, closesAt = null;
+  for(const [start,end] of ranges){
+    if(mins >= start && mins < end){ open = true; closesAt = end; break; }
+  }
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  const sub = document.getElementById('statusSub');
+
+  if(open){
+    dot.style.background = '#3fae4a';
+    text.textContent = 'Ouvert actuellement';
+    sub.textContent = 'Ferme à ' + fmt(closesAt);
+  } else {
+    dot.style.background = '#c8342a';
+    text.textContent = 'Fermé actuellement';
+    // find next opening
+    let d = day, checked = 0, found = null;
+    while(checked < 8 && !found){
+      const ranges2 = schedule[d];
+      for(const [start] of ranges2){
+        if(d !== day || start > mins){ found = { d, start }; break; }
+      }
+      if(!found){ d = (d+1)%7; checked++; }
+    }
+    if(found){
+      const label = found.d === (day+1)%7 ? 'demain' : (found.d === day ? "aujourd'hui" : dayNames[found.d]);
+      sub.textContent = 'Réouvre ' + label + ' à ' + fmt(found.start);
+    }
+  }
+}
+updateStatus();
+setInterval(updateStatus, 60000);
+</script>
+</body>
+</html>
